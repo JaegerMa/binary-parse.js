@@ -1,0 +1,12 @@
+{
+  "name": "binary-parse",
+  "version": "0.9.0",
+  "description": "Parse binary data",
+  "main": "module.js",
+  "author": "JaegerMa",
+  "license": "MIT",
+  "dependencies": {
+    "big.js": "^5.1.2"
+  },
+  "repository": "https://github.com/JaegerMa/binary-parse.js"
+}
