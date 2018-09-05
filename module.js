@@ -123,7 +123,7 @@ class BinaryParser
 		
 
 		let bigEndian = endian !== 'le' && endian !== 'little' && endian !== 'l' && endian !== false && endian !== 'false' && endian !== '0' && endian !== 0;
-		signed = signed !== 'unsigned' && signed !== 'u' && signed !== '0' && signed !== 0 && signed !== 'false' && signed !== false;
+		signed = signed && signed !== 'unsigned' && signed !== 'u' && signed !== '0' && signed !== 0 && signed !== 'false';
 
 		let value = 0;
 		let buffer = this.read(bits);
