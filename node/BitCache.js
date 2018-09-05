@@ -19,6 +19,16 @@ class BitCache
 		this.append(...data);
 	}
 
+	get cacheLength()
+	{
+		return this._cacheLength;
+	}
+	set cacheLength(val)
+	{
+		this._cacheLength = val;
+		this.trimCache();
+	}
+
 	read(length)
 	{
 		if(this.cacheLength === 0 && length % 8 === 0)
@@ -31,7 +41,6 @@ class BitCache
 		let value = (this.cache >>> shift) & (2 ** length - 1);
 
 		this.cacheLength -= length;
-		this.cache &= 2 ** this.cacheLength - 1;
 
 		return value;
 	}
@@ -163,6 +172,11 @@ class BitCache
 	{
 		while(this.isDataLeft() || this.isAppendingLeft())
 			this.fillCache();
+	}
+
+	trimCache()
+	{
+		this.cache &= 2 ** this.cacheLength - 1;
 	}
 
 	moveDataCollectionCursor()
