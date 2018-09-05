@@ -64,6 +64,9 @@ This type reads binary data and **outputs** a hex string
 Parameters: `[type, length (elements)]`
 - `buffer`  
 Parameters: `[length (bytes)]`
+- `bits`  
+Parameters: `[length (bytes)]`  
+Reads bits into an array of 0s and 1s
 - Single numbers  
 If a single number is used as type, it's interpreted as *unsigned*, *BigEndian* integer with that number of bits
 
@@ -149,7 +152,7 @@ const structure =
 };
 ```
 
-### Reading single bits
+### Reading single bits as number
 ```js
 const structure =
 {
@@ -161,6 +164,25 @@ const structure =
 		//In total, 3 bytes have been read
 	},
 };
+```
+### Reading single bits
+```js
+const structure =
+{
+	MyStruct:
+	{
+		field1: ['bits', 3],
+		field2: ['bits', 5],
+		field3: 'bits',
+	},
+};
+/* =>
+{
+	field1: [1, 1, 0],
+	field2: [1, 0, 0, 0, 1],
+	field3: [0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, ...],
+},
+*/
 ```
 
 ### Buffers
@@ -355,11 +377,12 @@ someField: ['string', () => { return someEncoding; }, () => { return someLength;
 ```
 
 ## Reading to end
-Using any type which accepts a length (`int`, `string`, `array`, `buffer`) with no length, length `0` or length `NaN` will lead them to read the data until the end.
+Using any type which accepts a length (`int`, `string`, `array`, `buffer`, `bits`) with no length, length `0` or length `NaN` will lead them to read the data until the end.
 The rule which all of these types follow is:
 > Is there any data, even a single bit, left? If yes, read the next element. If no, stop
 
 That means, if, for example, you're reading an array of `int32` with length `0` and there's one byte left at the end, the array tries to read another `int32` which is not possible and an exception will be thrown. This also happens when reading a buffer or a string if there are single bits left.
+The only safe parser (for reading to the end) is `Bits`, since it obviously reads single bits and so doesn't get into the case where it tries to read more data than is available.
 
 ## Big numbers
 As integers in JavaScript are only safe up to 52 bit, all numbers which are read with more than 51 bit are represented using BigNums from `big.js`.
