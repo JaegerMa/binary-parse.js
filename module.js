@@ -113,8 +113,15 @@ class BinaryParser
 		return Buffer.concat([leading, bytes]);
 	}
 
-	readInt(bits, { endian, signed } = {})
+	readInt(that, { bits, endian, signed } = {})
 	{
+		bits = this.resolve(bits, that);
+		endian = this.resolve(endian, that);
+		signed = this.resolve(signed, that);
+
+		validateLengthValue(bits);
+		
+
 		let bigEndian = endian !== 'le' && endian !== 'little' && endian !== 'l' && endian !== false && endian !== 'false' && endian !== '0' && endian !== 0;
 		signed = signed !== 'unsigned' && signed !== 'u' && signed !== '0' && signed !== 0 && signed !== 'false' && signed !== false;
 
