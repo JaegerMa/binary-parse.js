@@ -2,6 +2,71 @@
 
 `binary-parse` allows you to define a structure and parse binary data into that structure.
 
+
+If you've ever analyzed a binary protocol or file format, you know how bloated and unreadable the source code is. It gets even worse when the protocol has funny things like integers that start or end in the middle of a byte, a mixture of little and big endian or structures that are not static but it is decided during parsing which fields are present.
+`binary-parse` tries to provide an interface to analyze such binary formats declaratively without losing the ability to dynamically make decisions.
+
+Let's take a look how an IPv4 packet could be parsed (leaving the IP options and the payload raw):
+```js
+const BinaryParser = require('binary-parse');
+
+const structure =
+{
+	Header:
+	{
+		version: 4,
+		headerLength: 4,
+		tos: 8,
+		length: 16,
+		identification: ['buffer', 2],
+		flags: ['bits', 3],
+		fragmentOffset: 13,
+		ttl: 8,
+		protocol: 8,
+		checksum: ['buffer', 2],
+		sourceAddress: ['buffer', 4],
+		destinationAddress: ['buffer', 4],
+		options: ['buffer', (header) => (header.headerLength - 5) * 4],
+	},
+
+	Packet:
+	{
+		header: 'Header',
+		body: 'buffer',
+	},
+};
+
+let parser = new BinaryParser(structure);
+
+let rawPacket = Buffer.from(/* ... */);
+let packet = parser.parse(rawPacket, 'Packet');
+
+/*
+***Just sample data. Not a real IPv4-packet***
+packet =>
+{
+	header:
+	{
+		version: 4,
+		headerLength: 5,
+		tos: 0,
+		length: 1337,
+		identification: Buffer <42 42>,
+		flags: [0, 1, 0],
+		fragmentOffset: 4711,
+		ttl: 42,
+		protocol: 0x10,
+		checksum: Buffer <13 37>,
+		sourceAddress: Buffer <0a 0d 25 2a>
+		destinationAddres: Buffer <0a 0d 25 9f>,
+		options: Buffer <...>,
+	},
+	body: Buffer <43 61 74 73 20 77 69 6c 6c 20 74 61 6b 65 20 6f 76 65 72 20 74 68 65 20 77 6f 72 6c 64 ...>,
+}
+*/
+```
+
+
 ## Usage
 To use the binary parser, you have to create a structure and pass it together with the data to parse to a `BinaryParser` instance. For examples, how to build such a structure, see examples below.
 ```js
