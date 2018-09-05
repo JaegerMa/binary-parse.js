@@ -273,6 +273,8 @@ function validateLengthValue(val)
 {
 	if(val && typeof(val) !== 'number')
 		throw new Error(`Length must be a number`);
+	if(val < 0)
+		throw new Error(`Length must be greater or equal 0`);
 }
 
 BinaryParser.symbols = symbols;
