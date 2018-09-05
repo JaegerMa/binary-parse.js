@@ -107,6 +107,53 @@ class BitCache
 		let buffer = Buffer.concat(dataPieces);
 		return buffer;
 	}
+	readBits(bitCount)
+	{
+		if(bitCount < 0)
+			return;
+		if(this.cacheLength === 0 && bitCount % 8 === 0)
+			return this.readBitsRaw(bitCount);
+
+		let bits = [];
+
+		if(bitCount >= this.cacheLength)
+		{
+			bits.push(toBits(this.cache, { numLength: this.cacheLength }));
+			bitCount -= this.cacheLength;
+			this.cacheLength = 0;
+		}
+		if(this.cacheLength === 0)
+		{
+			const fullBytes = Math.trunc(bitCount / 8);
+			let bytes = this.readBytesRaw(fullBytes);
+			bytes = Array.from(bytes);
+
+			bits = bits.concat(bytes.map(toBits));
+			bitCount -= fullBytes * 8;
+		}
+		if(bitCount > 0)
+		{
+			while(bitCount > this.cacheLength)
+				this.fillCache();
+			
+			bits.push(toBits(this.cache, { numLength: this.cacheLength, length: bitCount }));
+			this.cacheLength -= bitCount;
+		}
+
+		bits = [].concat(...bits);
+		return bits;
+	}
+	readBitsRaw(bitCount)
+	{
+		if(this.cacheLength !== 0 || bitCount % 8 !== 0)
+			return this.readBits(bitCount);
+
+		const bytes = this.readBytesRaw(bitCount / 8);
+		let bits = bytes.map(toBits);
+		bits = [].concat(...bits);
+
+		return bits;
+	}
 
 	readBytesEnd()
 	{
@@ -140,6 +187,33 @@ class BitCache
 
 		let buffer = Buffer.concat(dataPieces);
 		return buffer;
+	}
+	readBitsEnd()
+	{
+		if(this.cacheLength === 0)
+			return this.readBitsEndRaw();
+
+		let bits = [];
+		
+		bits.push(toBits(this.cache, this.cacheLength));
+		this.cacheLength = 0;
+
+		const bytes = this.readBytesEndRaw();
+		bits = bits.concat(bytes.map(toBits));
+		
+		bits = [].concat(...bits);
+		return bits;
+	}
+	readBitsEndRaw()
+	{
+		if(this.cacheLength !== 0)
+			return this.readBitsEnd();
+		
+		const bytes = this.readBytesRawEnd();
+		let bits = bytes.map(toBits);
+		bits = [].concat(...bits);
+	
+		return bits;
 	}
 
 
@@ -247,6 +321,20 @@ function toBuffer(data)
 		return Buffer.from([data]);
 
 	return Buffer.from(data);
+}
+function toBits(num, { numLength = 8, length = 0 } = {})
+{
+	length = length || numLength;
+
+	let bits = [];
+	for(let i = 0; i < length; ++i)
+	{
+		const shift = numLength - i - 1;
+		const bit = (num >> shift) & 0x1;
+		bits.push(bit);
+	}
+
+	return bits;
 }
 
 module.exports = BitCache;
