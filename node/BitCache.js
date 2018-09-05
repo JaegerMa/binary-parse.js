@@ -79,6 +79,9 @@ class BitCache
 	}
 	readBytesRaw(bytes)
 	{
+		if(this.cacheLength !== 0)
+			return this.readBytes(bytes);
+
 		let dataPieces = [];
 		while(bytes)
 		{
@@ -109,6 +112,9 @@ class BitCache
 	}
 	readBytesEndRaw()
 	{
+		if(this.cacheLength !== 0)
+			return this.readBytesEnd();
+
 		let dataPieces = [];
 		while(!this.endReached)
 		{
