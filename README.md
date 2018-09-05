@@ -5,7 +5,7 @@
 ## Usage
 To use the binary parser, you have to create a structure and pass it together with the data to parse to a `BinaryParser` instance. For examples, how to build such a structure, see examples below.
 ```js
-const BinaryParser = require('binary-parser');
+const BinaryParser = require('binary-parse');
 
 const structure = { /* See examples below */ };
 
