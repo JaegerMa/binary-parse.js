@@ -203,9 +203,7 @@ class BinaryParser
 	{
 		type = this.resolve(type, that);
 		length = this.resolve(length, that);
-
-		if(length && typeof(length) !== 'number')
-			throw new Error(`Length parameter must be a number`);
+		validateLengthValue(length);
 
 		let infinite = !length;
 
@@ -234,8 +232,7 @@ class BinaryParser
 	readBuffer(that, length)
 	{
 		length = this.resolve(length, that);
-		if(length && typeof(length) !== 'number')
-			throw new Error(`Length parameter must be a number`);
+		validateLengthValue(length);
 
 		if(!length)
 			return this.bitCache.readBytesEnd();
@@ -246,8 +243,7 @@ class BinaryParser
 	readBits(that, length)
 	{
 		length = this.resolve(length, that);
-		if(length && typeof (length) !== 'number')
-			throw new Error(`Length parameter must be a number`);
+		validateLengthValue(length);
 		
 		if(!length)
 			return this.bitCache.readBitsEnd();
@@ -263,6 +259,12 @@ class BinaryParser
 
 		return val;
 	}
+}
+
+function validateLengthValue(val)
+{
+	if(val && typeof(val) !== 'number')
+		throw new Error(`Length must be a number`);
 }
 
 BinaryParser.symbols = symbols;
