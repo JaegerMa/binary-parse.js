@@ -189,6 +189,7 @@ class BinaryParser
 	{
 		length = this.resolve(length, that);
 		encoding = this.resolve(encoding, that);
+		validateLengthValue(length);
 
 		encoding = encoding || 'ascii';
 
