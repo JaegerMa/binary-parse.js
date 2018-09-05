@@ -16,9 +16,12 @@ class BinaryParser
 	- bitCache: BitCache,
 	*/
 
-	constructor(definition)
+	constructor(definition, parsers = null)
 	{
 		this.parsers = defaultParsers.create(this);
+		if(parsers && typeof (parsers) === 'object')
+			Object.assign(this.parsers, parsers);
+		
 		this.readStructs(definition);
 	}
 
