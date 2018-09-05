@@ -31,6 +31,8 @@ class BitCache
 
 	read(length)
 	{
+		if(length < 0)
+			return;
 		if(this.cacheLength === 0 && length % 8 === 0)
 			return this.readRaw(length / 8);
 
@@ -46,6 +48,9 @@ class BitCache
 	}
 	readRaw(bytes)
 	{
+		if(bytes < 0)
+			return;
+
 		let remainingBytes = bytes;
 
 		let dataPieces = [];
@@ -67,6 +72,8 @@ class BitCache
 	}
 	readBytes(bytes)
 	{
+		if(bytes < 0)
+			return;
 		if(this.cacheLength === 0)
 			return this.readBytesRaw(bytes);
 
@@ -79,6 +86,8 @@ class BitCache
 	}
 	readBytesRaw(bytes)
 	{
+		if(bytes < 0)
+			return;
 		if(this.cacheLength !== 0)
 			return this.readBytes(bytes);
 
