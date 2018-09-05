@@ -37,6 +37,7 @@ function create(binaryParse)
 		hexString: (that, length) => _.readString({ length, encoding: 'hex' }),
 		array: (that, type, length) => _.readArray(that, { type, length }),
 		buffer: (that, length) => _.readBuffer(that, length),
+		bits: (that, length) => _.readBits(that, length),
 		fixed: (that, fixed) => this.resolve(fixed, that),
 	};
 

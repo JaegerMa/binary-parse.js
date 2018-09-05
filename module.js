@@ -243,6 +243,19 @@ class BinaryParser
 		return this.bitCache.readBytes(length);
 	}
 
+	readBits(that, length)
+	{
+		length = this.resolve(length, that);
+		if(length && typeof (length) !== 'number')
+			throw new Error(`Length parameter must be a number`);
+		
+		if(!length)
+			return this.bitCache.readBitsEnd();
+		
+		return this.bitCache.readBits(length);
+	}
+
+
 	resolve(val, that)
 	{
 		while(typeof(val) === 'function')
