@@ -138,7 +138,7 @@ class BitCache
 	}
 	prependBits(data, length)
 	{
-		this.cache | (data << this.cacheLength);
+		this.cache |= (data << this.cacheLength);
 		this.cacheLength += length;
 	}
 
