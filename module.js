@@ -94,8 +94,8 @@ class BinaryParser
 			let [parserName, ...args] = val;
 			return (that) =>
 			{
-				parserName = this.resolve(parserName, that);
-				let parser = this.getParser(parserName);
+				let resolvedParserName = this.resolve(parserName, that);
+				let parser = this.getParser(resolvedParserName);
 
 				return parser(that, ...args);
 			};
