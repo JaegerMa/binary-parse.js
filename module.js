@@ -220,7 +220,7 @@ class BinaryParser
 		let parsed = [];
 		if(infinite)
 		{
-			while(!bitCache.endReached)
+			while(!this.bitCache.endReached)
 				readPiece();
 		}
 		else
