@@ -442,7 +442,7 @@ someField: ['string', () => { return someEncoding; }, () => { return someLength;
 ```
 
 ## Reading to end
-Using any type which accepts a length (`int`, `string`, `array`, `buffer`, `bits`) with no length, length `0` or length `NaN` will lead them to read the data until the end.
+Using any type which accepts a length (`int`, `string`, `array`, `buffer`, `bits`) with no length, length `null`, `undefined`, or `Infinity` will lead them to read the data until the end.
 The rule which all of these types follow is:
 > Is there any data, even a single bit, left? If yes, read the next element. If no, stop
 

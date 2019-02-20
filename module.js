@@ -97,7 +97,7 @@ class BinaryParser
 	{
 		let bitCache = this.bitCache;
 
-		if(bits === 0 || isNaN(bits))
+		if(isInfinity(bits))
 			return bitCache.readBytesEnd();
 		if(bits % 8 === 0)
 			return bitCache.readBytes(bits / 8);
@@ -213,7 +213,7 @@ class BinaryParser
 		length = this.resolve(length, that);
 		validateLengthValue(length);
 
-		let infinite = !length;
+		let infinite = isInfinity(length);
 
 		let parse = this.getParser(type);
 
@@ -242,7 +242,7 @@ class BinaryParser
 		length = this.resolve(length, that);
 		validateLengthValue(length);
 
-		if(!length)
+		if(isInfinity(length))
 			return this.bitCache.readBytesEnd();
 
 		return this.bitCache.readBytes(length);
@@ -253,7 +253,7 @@ class BinaryParser
 		length = this.resolve(length, that);
 		validateLengthValue(length);
 		
-		if(!length)
+		if(isInfinity(length))
 			return this.bitCache.readBitsEnd();
 		
 		return this.bitCache.readBits(length);
@@ -271,10 +271,16 @@ class BinaryParser
 
 function validateLengthValue(val)
 {
-	if(val && typeof(val) !== 'number')
+	if(val === null || val === undefined)
+		return;
+	if(typeof (val) !== 'number')
 		throw new Error(`Length must be a number`);
-	if(val < 0)
+	if(val < 0 || isNaN(val))
 		throw new Error(`Length must be greater or equal 0`);
+}
+function isInfinity(val)
+{
+	return val === undefined || val === null || val === Infinity;
 }
 
 BinaryParser.symbols = symbols;
