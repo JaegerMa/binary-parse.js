@@ -240,10 +240,14 @@ class BinaryParser
 	{
 		length = this.resolve(length, that);
 		encoding = this.resolve(encoding, that);
+		
 		validateLengthValue(length);
+		if(isInfinity(length))
+			length = Infinity;
 
 		encoding = encoding || 'ascii';
 
+		
 		let buffer = this.read(length * 8);
 		return buffer.toString(encoding);
 	}
