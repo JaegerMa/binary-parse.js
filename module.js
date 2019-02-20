@@ -125,7 +125,7 @@ class BinaryParser
 		let bitCache = this.bitCache;
 
 		if(isInfinity(bits))
-			return bitCache.readBytesEnd();
+			return this.readEnd();
 		if(bits % 8 === 0)
 			return bitCache.readBytes(bits / 8);
 		
@@ -138,6 +138,30 @@ class BinaryParser
 		let bytes = bitCache.readBytes(byteCount);
 
 		return Buffer.concat([leading, bytes]);
+	}
+	readEnd()
+	{
+		let bits = bitCache.readBitsEnd();
+		let bytes = [];
+
+		let leadingBitCount = bits.length % 8;
+		if(leadingBitCount > 0)
+			bytes.push(toByte(0, leadingBitCount));
+		
+		for(let bitIdx = leadingBitCount; bitIdx < bits.length; bitIdx += 8)
+			bytes.push(toByte(bitIdx, bitIdx + 8));
+
+		return Buffer.from(bytes);
+
+
+		function toByte(bitFrom, bitTo)
+		{
+			let byte = 0;
+			for(let i = bitFrom; i < bitTo; ++i)
+				byte = (byte << 1) | bits[i];
+			
+			return byte;
+		}
 	}
 
 	readInt(that, { bits, endian, signed } = {})
