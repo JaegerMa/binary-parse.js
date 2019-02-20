@@ -424,6 +424,50 @@ const structure =
 }
 */
 ```
+### Limited structures
+If a number is passed as argument to a struct, the struct has exactly that amount of bits available.
+The fields of the structure start at the same position they would without this parameter, but if it tries to read more than the given amount of bits, an error will be thrown, as this struct has reached the end of its block of data.
+After the structure has finished reading and returns, the bit cursor is set to the end of the block that was given to the structure, so reading is continued as if the structure has read all of its available bits, no matter how many it actually read.
+
+Of course also in this case the byte boundaries can be broken. You can start and end in the middle of byte or pass a number of bits which isn't divisible by 8.
+
+```js
+const structure =
+{
+	ChildStruct:
+	{
+		childField1: 16,
+		childField2: 8,
+		data: 'buffer'
+	},
+
+	MyStruct:
+	{
+		childLength: 'uint8',
+		subStruct: ['ChildStruct', (struct) => struct.childLength * 8],
+		field3: 8,
+		field4: 16,
+		data: 'buffer'
+	}
+};
+/* =>
+{
+	childLength: 10,
+	subStruct:
+	{
+		childField1: 42,
+		childField2: 43,
+		data: Buffer <11 22 33 44 55 66 77>,
+	},
+	field3: 13,
+	field4: 37,
+	data: Buffer <12 34 56 ...>,
+},
+}
+*/
+```
+
+
 
 ## Parameters
 Some types accept parameters. These can be passed using `[]`. Example:

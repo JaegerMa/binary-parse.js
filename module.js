@@ -3,6 +3,7 @@
 const Big = require('big.js');
 const defaultParsers = require(__dirname + '/node/default-parsers');
 const BitCache = require(__dirname + '/node/BitCache');
+const LimitedBitCache = require(__dirname + '/node/LimitedBitCache');
 
 const symbols =
 {
@@ -47,17 +48,43 @@ class BinaryParser
 		let parsers = Object.entries(struct)
 			.map(([name, type]) => [name, this.getParser(type)]);
 
-		return (parent) =>
+		return (parent, bitLimit = undefined) =>
 		{
 			let obj =
 			{
 				[symbols.parent]: parent,
 			};
 
-			for(let [name, parser] of parsers)
-				obj[name] = parser(obj);
+			bitLimit = bitLimit && this.resolve(bitLimit, parent);
+			validateLengthValue(bitLimit);
+			if(isInfinity(bitLimit))
+			{
+				executeParsers();
+			}
+			else
+			{
+				let realBitCache = this.bitCache;
+				let limitedBitCache = new LimitedBitCache(realBitCache, bitLimit);
+				this.bitCache = limitedBitCache;
+				try
+				{
+					executeParsers();
+					limitedBitCache.skipToEnd();
+				}
+				finally
+				{
+					this.bitCache = realBitCache;
+				}
+			}
 
 			return obj;
+
+			
+			function executeParsers()
+			{
+				for(let [name, parser] of parsers)
+					obj[name] = parser(obj);
+			}
 		};
 	}
 	getParser(val)
