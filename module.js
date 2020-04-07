@@ -22,7 +22,7 @@ class BinaryParser
 		this.parsers = defaultParsers.create(this);
 		if(parsers && typeof (parsers) === 'object')
 			Object.assign(this.parsers, parsers);
-		
+
 		this.readStructs(definition);
 	}
 
@@ -79,7 +79,7 @@ class BinaryParser
 
 			return obj;
 
-			
+
 			function executeParsers()
 			{
 				for(let [name, parser] of parsers)
@@ -128,7 +128,7 @@ class BinaryParser
 			return this.readEnd();
 		if(bits % 8 === 0)
 			return bitCache.readBytes(bits / 8);
-		
+
 
 		let leadingBits = bits % 8;
 		let leading = bitCache.read(leadingBits);
@@ -147,7 +147,7 @@ class BinaryParser
 		let leadingBitCount = bits.length % 8;
 		if(leadingBitCount > 0)
 			bytes.push(toByte(0, leadingBitCount));
-		
+
 		for(let bitIdx = leadingBitCount; bitIdx < bits.length; bitIdx += 8)
 			bytes.push(toByte(bitIdx, bitIdx + 8));
 
@@ -159,7 +159,7 @@ class BinaryParser
 			let byte = 0;
 			for(let i = bitFrom; i < bitTo; ++i)
 				byte = (byte << 1) | bits[i];
-			
+
 			return byte;
 		}
 	}
@@ -171,7 +171,7 @@ class BinaryParser
 		signed = this.resolve(signed, that);
 
 		validateLengthValue(bits);
-		
+
 
 		let bigEndian = endian !== 'le' && endian !== 'little' && endian !== 'l' && endian !== false && endian !== 'false' && endian !== '0' && endian !== 0;
 		signed = signed && signed !== 'unsigned' && signed !== 'u' && signed !== '0' && signed !== 0 && signed !== 'false';
@@ -240,14 +240,14 @@ class BinaryParser
 	{
 		length = this.resolve(length, that);
 		encoding = this.resolve(encoding, that);
-		
+
 		validateLengthValue(length);
 		if(isInfinity(length))
 			length = Infinity;
 
 		encoding = encoding || 'ascii';
 
-		
+
 		let buffer = this.read(length * 8);
 		return buffer.toString(encoding);
 	}
@@ -307,10 +307,10 @@ class BinaryParser
 	{
 		length = this.resolve(length, that);
 		validateLengthValue(length);
-		
+
 		if(isInfinity(length))
 			return this.bitCache.readBitsEnd();
-		
+
 		return this.bitCache.readBits(length);
 	}
 
