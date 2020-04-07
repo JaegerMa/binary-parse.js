@@ -494,7 +494,7 @@ That means, if, for example, you're reading an array of `int32` with length `0` 
 The only safe parser (for reading to the end) is `Bits`, since it obviously reads single bits and so doesn't get into the case where it tries to read more data than is available.
 
 ## Big numbers
-As integers in JavaScript are only safe up to 52 bit, all numbers which are read with more than 51 bit are represented using BigNums from `big.js`.
+As integers in JavaScript are only safe up to 52 bit, all numbers which are read with more than 51 bit are represented using native JavaScript BigInts.
 
 ## Parents
 You can access data of the current object when using functions (see examples `Dynamic values` and `Calculations`).

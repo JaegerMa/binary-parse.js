@@ -1,6 +1,5 @@
 'use strict';
 
-const Big = require('big.js');
 const defaultParsers = require(__dirname + '/node/default-parsers');
 const BitCache = require(__dirname + '/node/BitCache');
 const LimitedBitCache = require(__dirname + '/node/LimitedBitCache');
@@ -183,7 +182,7 @@ class BinaryParser
 		let bignum = bits > 51;
 		if(bignum)
 		{
-			value = new Big(0);
+			value = 0n;
 			appendByte = appendByteBig;
 			applySign = applySignBig;
 		}
@@ -229,11 +228,11 @@ class BinaryParser
 
 		function appendByteBig(byte)
 		{
-			value = value.times(0x100).plus(byte);
+			value = (value * 0x100n) + BigInt(byte & 0xFF);
 		}
 		function applySignBig()
 		{
-			value = value.minus(2 ** (bits - 1));
+			value -= 2n ** BigInt(bits - 1);
 		}
 	}
 	readString(that, { length, encoding })

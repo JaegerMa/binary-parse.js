@@ -5,8 +5,6 @@
   "main": "module.js",
   "author": "JaegerMa",
   "license": "MIT",
-  "dependencies": {
-    "big.js": "^5.1.2"
-  },
+  "dependencies": { },
   "repository": "https://github.com/JaegerMa/binary-parse.js"
 }
