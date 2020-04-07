@@ -208,7 +208,7 @@ class BinaryParser
 
 		function appendByte(byte)
 		{
-			value = (value << 8) | (byte & 0xFF);
+			value = (value * 0x100) + (byte & 0xFF);
 		}
 		function stripSignBit()
 		{
