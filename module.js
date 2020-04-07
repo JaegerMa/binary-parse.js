@@ -218,7 +218,7 @@ class BinaryParser
 			let signBit = signByte >> signBitIdx;
 
 			signByte &= 2 ** signBitIdx - 1;
-			buffer[signBitIdx] = signByte;
+			buffer[signByteIdx] = signByte;
 
 			return signBit;
 		}
