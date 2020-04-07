@@ -125,6 +125,21 @@ This type reads binary data and **outputs** base64 string
 - `hexString`  
 Parameters: `[length (bytes)]`  
 This type reads binary data and **outputs** a hex string
+- `cstring` C string / Null-terminated string
+Data is read until a null-byte is reached. The null-byte is consumed but not included into the string.
+Parameters `[encoding]`
+  - Encoding: All encodings accepted by NodeJS `Buffer.toString`-method
+  **Default**: `ascii`
+- `utf8CString`
+Parameters: `none`
+- `utf16LECString`
+Parameters: `none`
+- `base64CString`
+Parameters: `none`
+This type reads binary data and **outputs** base64 string
+- `hexCString`
+Parameters: `none`
+This type reads binary data and **outputs** a hex string
 - `array`  
 Parameters: `[type, length (elements)]`
 - `buffer`  

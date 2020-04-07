@@ -250,6 +250,23 @@ class BinaryParser
 		let buffer = this.read(length * 8);
 		return buffer.toString(encoding);
 	}
+	readNullTerminatedString(that, { encoding })
+	{
+		encoding = this.resolve(encoding, that);
+		encoding = encoding || 'ascii';
+
+		let bytes = [];
+		while(!this.bitCache.endReached)
+		{
+			let byte = this.read(8);
+			if(byte === 0)
+				break;
+
+			bytes.push(byte);
+		}
+
+		return Buffer.from(bytes).toString(encoding)
+	}
 	readFloat()
 	{
 		let buffer = this.read(32);
