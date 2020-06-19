@@ -254,7 +254,7 @@ class BitCache
 	fillCacheFrom({ data, length })
 	{
 		data &= 2 ** length - 1;
-		this.cache = (this.cache << length) | data;
+		this.cache = (this.cache * (2 ** length)) + data;
 		this.cacheLength += length;
 	}
 	fillCacheEnd()
