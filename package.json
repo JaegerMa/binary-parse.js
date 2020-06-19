@@ -1,6 +1,6 @@
 {
   "name": "binary-parse",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Parse binary data",
   "main": "module.js",
   "author": "JaegerMa",
