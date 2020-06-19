@@ -135,7 +135,7 @@ class BitCache
 		{
 			while(bitCount > this.cacheLength)
 				this.fillCache();
-			
+
 			bits.push(toBits(this.cache, { numLength: this.cacheLength, length: bitCount }));
 			this.cacheLength -= bitCount;
 		}
@@ -176,7 +176,7 @@ class BitCache
 		{
 			while(!this.isDataLeft())
 				this.moveDataCollectionCursor();
-			
+
 			if(this.dataCursor === 0)
 				dataPieces.push(this.data);
 			else
@@ -194,13 +194,13 @@ class BitCache
 			return this.readBitsEndRaw();
 
 		let bits = [];
-		
+
 		bits.push(toBits(this.cache, this.cacheLength));
 		this.cacheLength = 0;
 
 		const bytes = this.readBytesEndRaw();
 		bits = bits.concat(bytes.map(toBits));
-		
+
 		bits = [].concat(...bits);
 		return bits;
 	}
@@ -208,11 +208,11 @@ class BitCache
 	{
 		if(this.cacheLength !== 0)
 			return this.readBitsEnd();
-		
+
 		const bytes = this.readBytesRawEnd();
 		let bits = bytes.map(toBits);
 		bits = [].concat(...bits);
-	
+
 		return bits;
 	}
 
@@ -231,7 +231,7 @@ class BitCache
 		data = toBuffer(data);
 		if(!data || !data.length)
 			return;
-		
+
 		this.appendings.push(data);
 	}
 	prependBits(data, length)
@@ -250,7 +250,7 @@ class BitCache
 		++this.dataCursor;
 
 		this.fillCacheFrom({ data: byte, length: 8 });
-	}	
+	}
 	fillCacheFrom({ data, length })
 	{
 		data &= 2 ** length - 1;
@@ -306,8 +306,8 @@ function toBuffer(data)
 		return;
 
 	if(Array.isArray(data))
-		return Buffer.from(data);	
-	
+		return Buffer.from(data);
+
 	if(typeof(data) === 'symbol')
 		return;
 
