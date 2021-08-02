@@ -267,15 +267,19 @@ class BinaryParser
 
 		return Buffer.from(bytes).toString(encoding)
 	}
-	readFloat()
+	readFloat(that, {endian} = {})
 	{
+		endian = this.resolve(endian, that);
+		let bigEndian = endian !== 'le' && endian !== 'little' && endian !== 'l' && endian !== false && endian !== 'false' && endian !== '0' && endian !== 0;
 		let buffer = this.read(32);
-		return buffer.readFloat();
+		return bigEndian ? buffer.readFloatBE() : buffer.readFloatLE();
 	}
-	readDouble()
+	readDouble(that, {endian} = {})
 	{
+		endian = this.resolve(endian, that);
+		let bigEndian = endian !== 'le' && endian !== 'little' && endian !== 'l' && endian !== false && endian !== 'false' && endian !== '0' && endian !== 0;
 		let buffer = this.read(64);
-		return buffer.readDouble();
+		return bigEndian ? buffer.readDoubleBE() : buffer.readDoubleLE();
 	}
 
 	readArray(that, { type, length })
