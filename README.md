@@ -109,8 +109,18 @@ Parameters: `[length (bits), endianess, signed]`
   **Default**: `bigendian`
   - Values for Signed: `signed`, `s`, `1`, `true`, `unsigned`, `u`, `0`, `false`  
   **Default**: `unsigned`
-- `float`: Float, 32 bit
-- `double`: Double, 64 bit
+- `floatbe`
+- `floatle`
+- `float`: Float, 32 bit  
+Parameters: `[endianess]`
+  - Values for Endianess: `b`, `be`, `big`, `bigendian`, `l`, `le`, `little`, `littleendian`  
+  **Default**: `bigendian`
+- `doublebe`
+- `doublele`
+- `double`: Double, 64 bit  
+Parameters: `[endianess]`
+  - Values for Endianess: `b`, `be`, `big`, `bigendian`, `l`, `le`, `little`, `littleendian`  
+  **Default**: `bigendian`
 - `string`  
 Parameters `[length (bytes), encoding]`
   - Encoding: All encodings accepted by NodeJS `Buffer.toString`-method  
